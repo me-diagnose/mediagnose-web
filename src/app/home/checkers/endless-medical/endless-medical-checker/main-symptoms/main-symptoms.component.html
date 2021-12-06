@@ -1,0 +1,4 @@
+<ul *ngIf="showList">
+  <app-question [question]="question"></app-question>
+  <li *ngFor="let symptom of MainSymptomCategories | keyvalue" (click)="onSymptomClick(symptom)">{{symptom.value}}</li>
+</ul>

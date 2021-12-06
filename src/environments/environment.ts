@@ -3,7 +3,11 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  endlessMedical: {
+    checkerUrl: 'https://api-prod.endlessmedical.com/v1/dx/',
+    sessionKey: 'EM_Session',
+  }
 };
 
 /*
