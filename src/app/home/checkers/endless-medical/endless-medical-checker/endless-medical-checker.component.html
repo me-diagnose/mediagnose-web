@@ -1,9 +1,9 @@
-<ng-template #question let-question>
+<ng-template #question let-question='question'>
   <div [innerHTML]="question">
   </div>
 </ng-template>
 
-<ng-template #multipleChoices let-choices let-isTerms>
+<ng-template #multipleChoices let-choices=choices let-isTerms='isTerms'>
   <div>
     <ng-container *ngIf="isTerms">
       <ul>
@@ -19,10 +19,10 @@
   </div>
 </ng-template>
 
-<ng-template #number let-min='min' let-max let-default>
+<ng-template #number let-min='min' let-max='max' let-defaultNumber=defaultNumber>
   <div>
     this will be a dragging thingy
-    <input type="number" [min]="min" [max]="max" [value]="default" #inputValue />
+    <input type="number" [min]="min" [max]="max" [value]="defaultNumber" #inputValue />
     <button type="button" (click)="onAnswer(inputValue.value)">Submit</button>
   </div>
 </ng-template>
@@ -53,7 +53,7 @@
 
       <ng-container *ngSwitchCase="'integer'">
         <ng-container
-          *ngTemplateOutlet="number; context: {min: currentQuestion.min, max: currentQuestion.max, default: currentQuestion.default}"></ng-container>
+          *ngTemplateOutlet="number; context: {min: currentQuestion.min, max: currentQuestion.max, defaultNumber: currentQuestion.default}"></ng-container>
       </ng-container>
     </ng-container>
   </div>
