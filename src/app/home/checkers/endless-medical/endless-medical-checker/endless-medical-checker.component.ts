@@ -85,7 +85,7 @@ export class EndlessMedicalCheckerComponent implements OnInit, OnDestroy {
 
   async acceptedTerms(accepted: boolean): Promise<void> {
     if (!accepted) {
-      await this.router.navigate(['..', 'home'])
+      await this.goHome();
     }
 
     this.termsAccepted = true;
@@ -101,7 +101,7 @@ export class EndlessMedicalCheckerComponent implements OnInit, OnDestroy {
     await this.checkerService.updateSymptom(name, answerValue);
 
     this.conversation.push({
-      questionText: this.currentQuestion.laytext,
+      questionText: this.currentQuestion.laytext || this.currentQuestion.text,
       questionName: name,
       answerText,
       answerValue: answerValue
@@ -173,6 +173,11 @@ export class EndlessMedicalCheckerComponent implements OnInit, OnDestroy {
 
   endSession(): void {
     this.checkerService.endSession();
+    this.goHome();
+  }
+
+  goHome(): void {
+    this.router.navigate(['..', 'home'])
   }
 
   ngOnDestroy(): void {
