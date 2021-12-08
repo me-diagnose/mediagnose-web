@@ -1,0 +1,76 @@
+<ng-template #question let-question='question'>
+  <div [innerHTML]="question">
+  </div>
+</ng-template>
+
+<ng-template #multipleChoices let-choices=choices let-isTerms='isTerms'>
+  <div>
+    <ng-container *ngIf="isTerms">
+      <ul>
+        <li (click)="acceptedTerms(true)">I have read and I accept the terms</li>
+        <li (click)="acceptedTerms(false)">I do not accept the terms</li>
+      </ul>
+    </ng-container>
+    <ng-container *ngIf="!isTerms">
+      <ul *ngFor="let choice of choices">
+        <li [value]="choice.value" [attr.name]="choice.name" (click)="onAnswer(choice.value)">{{choice.laytext}}</li>
+      </ul>
+    </ng-container>
+  </div>
+</ng-template>
+
+<ng-template #number let-min='min' let-max='max' let-defaultNumber=defaultNumber>
+  <div>
+    this will be a dragging thingy
+    <input type="number" [min]="min" [max]="max" [value]="defaultNumber" #inputValue />
+    <button type="button" (click)="onAnswer(inputValue.value)">Submit</button>
+  </div>
+</ng-template>
+
+<ng-template #chosenAnswer let-answer='answer'>
+  <span>{{answer}}</span>
+</ng-template>
+
+<div class="conversation-container">
+  <ng-container *ngIf="showTerms">
+    <app-question [question]="terms"></app-question>
+
+    <ng-container *ngTemplateOutlet="multipleChoices; context: {isTerms: true}"></ng-container>
+  </ng-container>
+
+  <app-conversation-text *ngFor="let text of conversation" [question]="text.questionText" [answer]="text.answerText || text.answerValue"></app-conversation-text>
+
+  <app-main-symptoms *ngIf="showMainSymptomCategories" (answerMainSymptom)="onMainSymptomAnswered($event)" (showMainQuestion)="onShowCurrentQuestion($event)"></app-main-symptoms>
+
+  <div *ngIf="currentQuestion && !showResults">
+    <app-question [question]="currentQuestion.laytext"></app-question>
+
+    <ng-container [ngSwitch]="currentQuestion.type">
+      <ng-container *ngSwitchCase="'categorical'">
+        <ng-container
+          *ngTemplateOutlet="multipleChoices; context: {choices: currentQuestion.choices, isTerms: false}"></ng-container>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'integer'">
+        <ng-container
+          *ngTemplateOutlet="number; context: {min: currentQuestion.min, max: currentQuestion.max, defaultNumber: currentQuestion.default}"></ng-container>
+      </ng-container>
+    </ng-container>
+  </div>
+
+  <div *ngIf="showResults">
+    <app-question [question]="'Here are the results based on your answers'"></app-question>
+
+    <ul>
+      <li *ngFor="let result of results">
+        <span>{{result[1]}}</span>: <span>{{diseaseProbability(result[2])}}</span>
+      </li>
+    </ul>
+
+    <div>
+      <button (click)="continue()" *ngIf="questionCount < 24">Ask me more questions</button>
+      <button (click)="endSession()">Finish</button>
+    </div>
+  </div>
+
+</div>

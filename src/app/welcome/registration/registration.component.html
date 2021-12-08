@@ -1,0 +1,56 @@
+<form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+  <div>
+    <label>Username</label>
+    <input type="text" name="username" formControlName="username">
+    <span *ngIf="registrationForm.get('username')?.touched && !registrationForm.get('username')?.valid">
+      <span *ngIf="registrationForm.get('username')?.hasError('required')">The username field is required</span>
+      <span *ngIf="registrationForm.get('username')?.hasError('minLength')">The username must be less than {{usernameMaxLength}}
+        characters</span>
+    </span>
+  </div>
+
+  <div>
+    <label>Email</label>
+    <input type="email" name="email" formControlName="email">
+    <span *ngIf="registrationForm.get('email')?.touched && !registrationForm.get('email')?.valid">
+      <span *ngIf="registrationForm.get('email')?.hasError('required')">The email field is required</span>
+      <span *ngIf="registrationForm.get('email')?.hasError('email')">Please fill a valid email</span>
+    </span>
+  </div>
+
+  <div>
+    <label>Password</label>
+    <input type="password" name="password" formControlName="password">
+    <span *ngIf="registrationForm.get('password')?.touched && !registrationForm.get('password')?.valid">
+      <span *ngIf="registrationForm.get('password')?.hasError('required')">The email field is required</span>
+      <span *ngIf="registrationForm.get('password')?.hasError('minLength')">Password must be at least {{passwordMinLength}}
+        characters</span>
+    </span>
+  </div>
+
+  <div>
+    <label>Confirm password</label>
+    <input type="password" formControlName="confirmPassword">
+    <span *ngIf="registrationForm.get('confirmPassword')?.touched && !registrationForm.get('confirmPassword')?.valid">
+      <span *ngIf="registrationForm.get('confirmPassword')?.hasError('required')">Password confirmation is required</span>
+      <span *ngIf="registrationForm.get('confirmPassword')?.hasError('passwordMatch')">Passwords don't match</span>
+    </span>
+  </div>
+
+
+  <div>
+    <label>I have read, understood and I accept and agree to comply with the <u (click)="toggleTerms()">Terms of use</u></label>
+    <input type="checkbox" formControlName="acceptTerms" (click)="hideTerms()">
+    <span *ngIf="registrationForm.get('acceptTerms')?.touched && !registrationForm.get('acceptTerms')?.valid">
+      <span *ngIf="registrationForm?.get('acceptTerms')?.hasError('required')">You must accept the terms of use</span>
+    </span>
+  </div>
+
+  <span *ngIf="showTerms">
+    <app-terms-of-use></app-terms-of-use>
+  </span>
+
+  <button type="submit" [disabled]="!registrationForm.valid">
+    submit
+  </button>
+</form>
