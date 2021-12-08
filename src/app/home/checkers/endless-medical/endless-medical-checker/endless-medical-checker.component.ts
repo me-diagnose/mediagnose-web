@@ -149,6 +149,10 @@ export class EndlessMedicalCheckerComponent implements OnInit, OnDestroy {
         this.checkerService.getAllSymptoms$().subscribe((symptoms: ISymptomWithDetails[]) => {
           // @ts-ignore
           this.currentQuestion = symptoms.find(symptom => symptom.name === questions[0][0]);
+          if(!this.currentQuestion) {
+            // @ts-ignore
+            this.currentQuestion = this.checkerService.getSameCategoryQuestion(questions[0][0], this.answeredQuestions.map(question => question.name))
+          }
         })
       }
     })

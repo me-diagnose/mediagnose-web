@@ -33,11 +33,10 @@ export class MainSymptomsComponent {
     this.subscribeForSymptomQuestion(chosenSymptom);
   }
 
-  subscribeForSymptomQuestion(chosenSymptom: { key:string
+  subscribeForSymptomQuestion(chosenSymptom: { key: string
     value: string }): void {
     this.checkerService.getAllSymptoms$().subscribe((symptoms: ISymptomWithDetails[]) => {
       this.mainSymptomQuestion = symptoms.find((symptom: ISymptomWithDetails) => symptom.name === chosenSymptom.key);
-      console.log(this.mainSymptomQuestion)
       this.showMainQuestion.emit(this.mainSymptomQuestion);
     });
   }
