@@ -30,8 +30,6 @@ export enum MainSymptomsCategories {
   ElevatedSystolicBp = 'Elevated blood pressure.',
   GrossHematuria = 'Visible blood (red) in urine.',
   MicroscopicHematuriaRBCs = 'Red blood cells detected (test) in urine.',
-  FoamyUrine = 'Foamy or bublly urine.',
-  UAProteinuria = 'Protein in urine.',
   StrainStream = 'Straining on urination.',
   NonEmptyBladder = 'Feeling of not empyting bladder.',
   Edema = 'Swollen legs.',
