@@ -1,4 +1,7 @@
-<ul *ngIf="showList">
-  <app-question [question]="question"></app-question>
-  <li *ngFor="let symptom of MainSymptomCategories | keyvalue" (click)="onSymptomClick(symptom)">{{symptom.value}}</li>
-</ul>
+<ng-container *ngIf="showList" >
+  <mat-selection-list #multipleChoicesList [multiple]="false">
+    <mat-list-option *ngFor="let symptom of MainSymptomCategories | keyvalue" (click)="onSymptomClick(symptom)">
+      {{symptom.value}}
+    </mat-list-option>
+  </mat-selection-list>
+</ng-container>

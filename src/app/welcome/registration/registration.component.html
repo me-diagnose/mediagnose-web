@@ -1,56 +1,60 @@
 <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
-  <div>
-    <label>Username</label>
-    <input type="text" name="username" formControlName="username">
-    <span *ngIf="registrationForm.get('username')?.touched && !registrationForm.get('username')?.valid">
-      <span *ngIf="registrationForm.get('username')?.hasError('required')">The username field is required</span>
-      <span *ngIf="registrationForm.get('username')?.hasError('minLength')">The username must be less than {{usernameMaxLength}}
-        characters</span>
-    </span>
-  </div>
+  <mat-form-field>
+    <mat-label>Username</mat-label>
+    <input matInput type="text" name="username" formControlName="username" autocomplete="username">
+    <mat-error *ngIf="isError('username') && registrationForm.get('username')?.hasError('required')">This field is
+      required
+    </mat-error>
+    <mat-error *ngIf="isError('username') && registrationForm.get('username')?.hasError('maxlength')">Must be less
+      than {{usernameMaxLength}}
+      characters
+    </mat-error>
+  </mat-form-field>
 
-  <div>
-    <label>Email</label>
-    <input type="email" name="email" formControlName="email">
-    <span *ngIf="registrationForm.get('email')?.touched && !registrationForm.get('email')?.valid">
-      <span *ngIf="registrationForm.get('email')?.hasError('required')">The email field is required</span>
-      <span *ngIf="registrationForm.get('email')?.hasError('email')">Please fill a valid email</span>
-    </span>
-  </div>
+  <mat-form-field>
+    <mat-label>Email</mat-label>
+    <input matInput type="email" name="email" formControlName="email" autocomplete="email">
+    <mat-error *ngIf="isError('email') && registrationForm.get('email')?.hasError('required')">This field is required
+    </mat-error>
+    <mat-error *ngIf="isError('email') && registrationForm.get('email')?.hasError('email')">Please fill a valid email
+    </mat-error>
+  </mat-form-field>
 
-  <div>
-    <label>Password</label>
-    <input type="password" name="password" formControlName="password">
-    <span *ngIf="registrationForm.get('password')?.touched && !registrationForm.get('password')?.valid">
-      <span *ngIf="registrationForm.get('password')?.hasError('required')">The email field is required</span>
-      <span *ngIf="registrationForm.get('password')?.hasError('minLength')">Password must be at least {{passwordMinLength}}
-        characters</span>
-    </span>
-  </div>
+  <mat-form-field>
+    <mat-label>Password</mat-label>
+    <input matInput type="password" name="password" formControlName="password" autocomplete="new-password">
+    <mat-error *ngIf="isError('password') && registrationForm.get('password')?.hasError('required')">This field is
+      required
+    </mat-error>
+    <mat-error *ngIf="isError('password') && registrationForm.get('password')?.hasError('minLength')">Password must be
+      at least {{passwordMinLength}}
+      characters
+    </mat-error>
+  </mat-form-field>
 
-  <div>
-    <label>Confirm password</label>
-    <input type="password" formControlName="confirmPassword">
-    <span *ngIf="registrationForm.get('confirmPassword')?.touched && !registrationForm.get('confirmPassword')?.valid">
-      <span *ngIf="registrationForm.get('confirmPassword')?.hasError('required')">Password confirmation is required</span>
-      <span *ngIf="registrationForm.get('confirmPassword')?.hasError('passwordMatch')">Passwords don't match</span>
-    </span>
-  </div>
+  <mat-form-field>
+    <mat-label>Confirm password</mat-label>
+    <input matInput type="password" formControlName="confirmPassword" autocomplete="new-password">
+    <mat-error *ngIf="isError('confirmPassword') && registrationForm.get('confirmPassword')?.hasError('required')">
+      Confirmation is required
+    </mat-error>
+    <mat-error *ngIf="isError('confirmPassword') && registrationForm.get('confirmPassword')?.hasError('passwordMatch')">
+      Passwords don't match
+    </mat-error>
+  </mat-form-field>
 
-
-  <div>
-    <label>I have read, understood and I accept and agree to comply with the <u (click)="toggleTerms()">Terms of use</u></label>
-    <input type="checkbox" formControlName="acceptTerms" (click)="hideTerms()">
-    <span *ngIf="registrationForm.get('acceptTerms')?.touched && !registrationForm.get('acceptTerms')?.valid">
-      <span *ngIf="registrationForm?.get('acceptTerms')?.hasError('required')">You must accept the terms of use</span>
-    </span>
-  </div>
+  <mat-checkbox type="checkbox" formControlName="acceptTerms" (click)="hideTerms()">
+  </mat-checkbox>
+  I have read, understood and I accept and agree to comply with the <u (click)="toggleTerms()">Terms of use</u>
+  <mat-error *ngIf="isError('acceptTerms') && registrationForm?.get('acceptTerms')?.hasError('required')">You must
+    accept the terms of use
+  </mat-error>
 
   <span *ngIf="showTerms">
     <app-terms-of-use></app-terms-of-use>
   </span>
 
-  <button type="submit" [disabled]="!registrationForm.valid">
+  <button mat-raised-button color="primary" type="submit" [disabled]="!registrationForm.valid">
     submit
   </button>
 </form>

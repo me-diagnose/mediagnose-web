@@ -1,22 +1,22 @@
 <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-  <div>
-    <label>Email</label>
-    <input type="email" name="email" formControlName="email">
-    <span *ngIf="loginForm.get('email')?.touched && !loginForm.get('email')?.valid">
-      <span *ngIf="loginForm.get('email')?.hasError('required')">The email field is required</span>
-      <span *ngIf="loginForm.get('email')?.hasError('email')">Please fill a valid email</span>
-    </span>
-  </div>
+  <mat-form-field>
+    <mat-label>Email</mat-label>
+    <input matInput type="email" name="email" formControlName="email" autocomplete="email">
+    <mat-error *ngIf="isError('email') && loginForm.get('email')?.hasError('required')">The email field is required
+    </mat-error>
+    <mat-error *ngIf="isError('email') && loginForm.get('email')?.hasError('email')">Please fill a valid email
+    </mat-error>
+  </mat-form-field>
 
-  <div>
-    <label>Password</label>
-    <input type="password" name="password" formControlName="password">
-    <span *ngIf="loginForm.get('password')?.touched && !loginForm.get('password')?.valid">
-      <span *ngIf="loginForm.get('password')?.hasError('required')">The email field is required</span>
-    </span>
-  </div>
+  <mat-form-field>
+    <mat-label>Password</mat-label>
+    <input matInput type="password" name="password" formControlName="password" autocomplete="current-password">
+    <mat-error *ngIf="isError('password') && loginForm.get('password')?.hasError('required')">The email field is
+      required
+    </mat-error>
+  </mat-form-field>
 
-  <button type="submit" [disabled]="!loginForm.valid">
+  <button mat-raised-button color="primary" type="submit" [disabled]="!loginForm.valid">
     submit
   </button>
 </form>

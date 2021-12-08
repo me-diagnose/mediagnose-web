@@ -6,29 +6,36 @@
 <ng-template #multipleChoices let-choices=choices let-isTerms='isTerms'>
   <div>
     <ng-container *ngIf="isTerms">
-      <ul>
-        <li (click)="acceptedTerms(true)">I have read and I accept the terms</li>
-        <li (click)="acceptedTerms(false)">I do not accept the terms</li>
-      </ul>
+      <mat-selection-list #TermsChoices [multiple]="false">
+        <mat-list-option (click)="acceptedTerms(true)">
+          I have read and I accept the terms
+        </mat-list-option>
+        <mat-list-option (click)="acceptedTerms(false)">
+          I do not accept the terms
+        </mat-list-option>
+      </mat-selection-list>
     </ng-container>
     <ng-container *ngIf="!isTerms">
-      <ul *ngFor="let choice of choices">
-        <li [value]="choice.value" [attr.name]="choice.name" (click)="onAnswer(choice.value)">{{choice.laytext}}</li>
-      </ul>
+      <mat-selection-list #multipleChoicesList [multiple]="false">
+        <mat-list-option *ngFor="let choice of choices" [value]="choice.value" (click)="onAnswer(choice.value)">
+          {{choice.laytext}}
+        </mat-list-option>
+      </mat-selection-list>
     </ng-container>
   </div>
 </ng-template>
 
-<ng-template #number let-min='min' let-max='max' let-defaultNumber=defaultNumber>
+<ng-template #number let-min='min' let-max='max' let-defaultNumber='defaultNumber'>
   <div>
-    this will be a dragging thingy
-    <input type="number" [min]="min" [max]="max" [value]="defaultNumber" #inputValue />
-    <button type="button" (click)="onAnswer(inputValue.value)">Submit</button>
+    <mat-slider
+      #slider
+      thumbLabel
+      step="1"
+      [value]="defaultNumber"
+      [min]=min
+      [max]=max></mat-slider>
+    <button mat-flat-button color="primary" type="button" (click)="onAnswer(slider.value)">Submit</button>
   </div>
-</ng-template>
-
-<ng-template #chosenAnswer let-answer='answer'>
-  <span>{{answer}}</span>
 </ng-template>
 
 <div class="conversation-container">
@@ -38,9 +45,11 @@
     <ng-container *ngTemplateOutlet="multipleChoices; context: {isTerms: true}"></ng-container>
   </ng-container>
 
-  <app-conversation-text *ngFor="let text of conversation" [question]="text.questionText" [answer]="text.answerText || text.answerValue"></app-conversation-text>
+  <app-conversation-text *ngFor="let text of conversation" [question]="text.questionText"
+                         [answer]="text.answerText || text.answerValue"></app-conversation-text>
 
-  <app-main-symptoms *ngIf="showMainSymptomCategories" (answerMainSymptom)="onMainSymptomAnswered($event)" (showMainQuestion)="onShowCurrentQuestion($event)"></app-main-symptoms>
+  <app-main-symptoms *ngIf="showMainSymptomCategories" (answerMainSymptom)="onMainSymptomAnswered($event)"
+                     (showMainQuestion)="onShowCurrentQuestion($event)"></app-main-symptoms>
 
   <div *ngIf="currentQuestion && !showResults">
     <app-question [question]="currentQuestion.laytext"></app-question>
@@ -68,8 +77,9 @@
     </ul>
 
     <div>
-      <button (click)="continue()" *ngIf="questionCount < 24">Ask me more questions</button>
-      <button (click)="endSession()">Finish</button>
+      <button mat-raised-button color="primary" (click)="continue()" *ngIf="questionCount < 24">Ask me more questions
+      </button>
+      <button mat-raised-button color="primary" (click)="endSession()">Finish</button>
     </div>
   </div>
 

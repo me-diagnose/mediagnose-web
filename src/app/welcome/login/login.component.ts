@@ -25,4 +25,8 @@ export class LoginComponent implements OnInit{
     const hashedPassword = hashPassword(password);
     await this.authService.login$(email, hashedPassword)
   }
+
+  isError(controlName: string): boolean {
+    return this.loginForm.get(controlName)?.touched && !this.loginForm.get(controlName)?.valid || false
+  }
 }
