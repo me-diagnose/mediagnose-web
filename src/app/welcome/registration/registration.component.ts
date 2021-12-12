@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {AbstractControlOptions, FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AuthService} from "../../shared/services/auth.service";
-import {IRegistration} from "../../shared/interfaces/user.interface";
 import {Router} from "@angular/router";
 import {mustMatch} from "../../utils/mustMatch.util";
+import {hashPassword} from '../../utils/hashPassword.util';
 
 const USERNAME_MAX_LENGTH = 30;
 const PASSWORD_MIN_LENGTH = 6;
@@ -54,8 +54,8 @@ export class RegistrationComponent implements OnInit {
   }
 
   onSubmit(): void {
-    console.log(this.registrationForm)
-    this.authService.register$(this.registrationForm.value as IRegistration).subscribe((registered: boolean) => {
+    const registrationInfo = {...this.registrationForm.value, password: hashPassword(this.registrationForm.get('password')?.value)}
+    this.authService.register$(registrationInfo).subscribe((registered: boolean) => {
       if(registered) {
         this.router.navigate(['..','payment'])
       }
