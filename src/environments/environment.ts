@@ -4,6 +4,7 @@
 
 export const environment = {
   production: false,
+  tokeyKeyName: 'MD_Token',
   mediagnoseAPI: {
     salt: '<YOUR SALT>',
     url: '<YOUR API URL>'

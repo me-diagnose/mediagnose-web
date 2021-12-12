@@ -4,8 +4,6 @@ import {IRegistration, IUser} from '../interfaces/user.interface';
 import {BehaviorSubject, firstValueFrom, map, Observable, tap} from 'rxjs';
 import {environment} from '../../../environments/environment';
 
-const TOKEN_KEY_NAME = 'MD_Token';
-
 interface IAuthResponse {
   accessToken: string
 }
@@ -14,6 +12,7 @@ interface IAuthResponse {
   providedIn: 'root'
 })
 export class AuthService {
+  private tokenKeyName = environment.tokeyKeyName;
   private apiURL = environment.mediagnoseAPI.url;
   private isLoginSubject$ = new BehaviorSubject<boolean>(this.hasToken());
 
@@ -38,7 +37,7 @@ export class AuthService {
   }
 
   public logout(): void {
-    localStorage.removeItem(TOKEN_KEY_NAME);
+    localStorage.removeItem(this.tokenKeyName);
     this.isLoginSubject$.next(false);
   }
 
@@ -52,12 +51,12 @@ export class AuthService {
   }
 
   private saveToken(token: string): void {
-    localStorage.setItem(TOKEN_KEY_NAME, token);
+    localStorage.setItem(this.tokenKeyName, token);
     this.isLoginSubject$.next(true);
   }
 
   private hasToken(): boolean {
-    return !!localStorage.getItem(TOKEN_KEY_NAME);
+    return !!localStorage.getItem(this.tokenKeyName);
   }
 
 }

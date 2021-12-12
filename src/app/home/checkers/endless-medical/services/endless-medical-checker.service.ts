@@ -84,6 +84,11 @@ export class EndlessMedicalCheckerService {
     return this.http.get<IDocumentationResponse>(`${this.url}GetMedicalDocumentation?SessionID=7g3FS02QuSAzNBSy&format=json`).pipe(map(response => response.MedicalDocumentation));
   }
 
+  public async submitAgeAndGender(age: number, gender: number): Promise<void> {
+    await this.updateSymptom('Age', age);
+    await this.updateSymptom('Gender', gender);
+  }
+
   public endSession(): void {
     localStorage.removeItem(this.sessionKey);
     this._sessionId = null;
