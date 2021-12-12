@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit{
   async onSubmit(): Promise<void> {
     const {email, password}  = this.loginForm.value;
     const hashedPassword = hashPassword(password);
-    await this.authService.login$(email, hashedPassword)
+    await this.authService.login(email, hashedPassword)
   }
 
   isError(controlName: string): boolean {
