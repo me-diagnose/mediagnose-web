@@ -29,7 +29,7 @@ export class EndlessMedicalCheckerComponent implements OnInit, OnDestroy {
       category: 'Constitutional and vital signs physical examination',
       IsPatientProvided: false
     },
-    sex: {
+    gender: {
       text: 'What is patient\'s gender?',
       laytext: 'What is your gender?',
       name: 'Gender',
@@ -110,11 +110,11 @@ export class EndlessMedicalCheckerComponent implements OnInit, OnDestroy {
     this.answeredQuestions.push(this.currentQuestion);
 
     if (this.currentQuestion.name === this.startingQuestion.age.name) {
-      this.currentQuestion = this.startingQuestion.sex;
+      this.currentQuestion = this.startingQuestion.gender;
       return;
     }
 
-    if(this.currentQuestion.name === this.startingQuestion.sex.name) {
+    if(this.currentQuestion.name === this.startingQuestion.gender.name) {
       this.showMainSymptomCategories = true;
       // @ts-ignore
       this.currentQuestion = undefined

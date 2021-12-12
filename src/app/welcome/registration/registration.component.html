@@ -43,6 +43,30 @@
     </mat-error>
   </mat-form-field>
 
+  <mat-form-field>
+    <mat-label>Gender</mat-label>
+    <mat-select matNativeControl formControlName="gender">
+      <mat-option [value]="2">
+        Male
+      </mat-option>
+      <mat-option [value]="2">
+        Female
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+<mat-form-field class="no-border">
+  <mat-label>Gender</mat-label>
+  <mat-slider
+    #slider
+    thumbLabel
+    step="1"
+    [value]="defaultAge"
+    [min]="minAge"
+    [max]="maxAge"></mat-slider>
+  <input class="hidden" matInput formControlName="age" [value]="slider.value">
+</mat-form-field>
+
   <mat-checkbox type="checkbox" formControlName="acceptTerms" (click)="hideTerms()">
   </mat-checkbox>
   I have read, understood and I accept and agree to comply with the <u (click)="toggleTerms()">Terms of use</u>
