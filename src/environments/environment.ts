@@ -4,6 +4,10 @@
 
 export const environment = {
   production: false,
+  mediagnoseAPI: {
+    salt: '<YOUR SALT>',
+    url: '<YOUR API URL>'
+  },
   endlessMedical: {
     checkerUrl: 'https://api-prod.endlessmedical.com/v1/dx/',
     sessionKey: 'EM_Session',
