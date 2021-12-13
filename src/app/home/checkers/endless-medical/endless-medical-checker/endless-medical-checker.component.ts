@@ -4,6 +4,7 @@ import {EndlessMedicalCheckerService} from '../services/endless-medical-checker.
 import {IChoice, ISymptomWithDetails} from '../interfaces/symptom.interface';
 import {IConversationText} from '../interfaces/conversation.interface';
 import {IAnalysisResponse} from '../interfaces/results.interface';
+import {UserService} from '../../../../shared/services/user.service';
 
 const MIN_QUESTION_LENGTH = 6;
 
@@ -17,48 +18,6 @@ export class EndlessMedicalCheckerComponent implements OnInit, OnDestroy {
   conversation: IConversationText[] = [];
   currentQuestion: ISymptomWithDetails;
   answeredQuestions: ISymptomWithDetails[] = [];
-  startingQuestion = {
-    age: {
-      text: 'What is your age?',
-      laytext: 'What is your age?',
-      name: 'Age',
-      type: 'integer',
-      min: 18,
-      max: 120,
-      default: 35,
-      category: 'Constitutional and vital signs physical examination',
-      IsPatientProvided: false
-    },
-    sex: {
-      text: 'What is patient\'s gender?',
-      laytext: 'What is your gender?',
-      name: 'Gender',
-      type: 'categorical',
-      default: 2,
-      choices: [
-        {
-          text: 'Data unavailable (i.e. unable to assess).',
-          laytext: 'Skip this question.',
-          value: 1,
-          relatedanswertag: null
-        },
-        {
-          text: 'Male.',
-          laytext: 'I am male.',
-          value: 2,
-          relatedanswertag: 'This question doesn\'t apply to me, as I am male.'
-        },
-        {
-          text: 'Female.',
-          laytext: 'I am female.',
-          value: 3,
-          relatedanswertag: 'This question doesn\'t apply to me, as I am female.'
-        }
-      ],
-      category: 'Constitutional and vital signs physical examination',
-      IsPatientProvided: true
-    }
-  };
   showMainSymptomCategories = false;
   showTerms = false;
   terms = 'Please remember, I am not healthcare provider, so I cannot provide professional medical advice.<br>' +
@@ -69,8 +28,7 @@ export class EndlessMedicalCheckerComponent implements OnInit, OnDestroy {
   showResults = false;
   Number = Number;
 
-  constructor(private router: Router, private checkerService: EndlessMedicalCheckerService) {
-  }
+  constructor(private router: Router, private checkerService: EndlessMedicalCheckerService, private userService: UserService) {}
 
   async ngOnInit(): Promise<void> {
     if (!this.checkerService.hasSessionID()) {
@@ -90,7 +48,8 @@ export class EndlessMedicalCheckerComponent implements OnInit, OnDestroy {
 
     this.termsAccepted = true;
     await this.checkerService.acceptTerms();
-    this.currentQuestion = {...this.startingQuestion.age};
+    await this.submitAgeAndGender();
+    this.showMainSymptomCategories = true;
   }
 
   async onAnswer(answerValue: number | string): Promise<void> {
@@ -108,18 +67,6 @@ export class EndlessMedicalCheckerComponent implements OnInit, OnDestroy {
     });
 
     this.answeredQuestions.push(this.currentQuestion);
-
-    if (this.currentQuestion.name === this.startingQuestion.age.name) {
-      this.currentQuestion = this.startingQuestion.sex;
-      return;
-    }
-
-    if(this.currentQuestion.name === this.startingQuestion.sex.name) {
-      this.showMainSymptomCategories = true;
-      // @ts-ignore
-      this.currentQuestion = undefined
-      return;
-    }
 
     if(this.conversation.length > this.questionCount) {
       // @ts-ignore
@@ -173,6 +120,11 @@ export class EndlessMedicalCheckerComponent implements OnInit, OnDestroy {
     this.questionCount = this.questionCount + 6;
     this.showResults = false;
     this.subscribeToSuggestions();
+  }
+
+  async submitAgeAndGender(): Promise<void> {
+    const {age, gender} = await this.userService.getUserData();
+    await this.checkerService.submitAgeAndGender(age, gender);
   }
 
   endSession(): void {

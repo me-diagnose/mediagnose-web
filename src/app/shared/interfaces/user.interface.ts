@@ -2,7 +2,7 @@ export interface IUser {
   username: string;
   email: string;
   age: number;
-  gender: UserGender;
+  gender: number;
 }
 
 export interface IRegistration {
@@ -10,10 +10,5 @@ export interface IRegistration {
   email: string;
   password: string;
   age: number;
-  gender: UserGender;
-}
-
-export enum UserGender {
-  MALE = 'male',
-  FEMALE = 'female'
+  gender: number;
 }

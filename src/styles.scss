@@ -6,3 +6,16 @@ mat-error {
   display: block;
   font-size: 75%;
 }
+.hidden {
+  display: none;
+}
+mat-form-field {
+  &.no-border {
+    .mat-form-field-wrapper {
+      .mat-form-field-underline {
+        height: 0;
+        background: red;
+      }
+    }
+  }
+}

@@ -7,6 +7,11 @@ import {hashPassword} from '../../utils/hashPassword.util';
 
 const USERNAME_MAX_LENGTH = 30;
 const PASSWORD_MIN_LENGTH = 6;
+const AGE_MIN = 18;
+const AGE_MAX = 100;
+const AGE_DEFAULT = 35;
+
+declare const FlutterwaveCheckout: any;
 
 @Component({
   selector: 'app-registration',
@@ -18,6 +23,9 @@ export class RegistrationComponent implements OnInit {
   showTerms = false;
   usernameMaxLength = USERNAME_MAX_LENGTH;
   passwordMinLength = PASSWORD_MIN_LENGTH;
+  minAge =  AGE_MIN;
+  maxAge =  AGE_MAX;
+  defaultAge = AGE_DEFAULT;
 
   constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {}
 
@@ -35,9 +43,8 @@ export class RegistrationComponent implements OnInit {
         email: [null, [Validators.email, Validators.required]],
         password: [null, [Validators.required, Validators.minLength(this.passwordMinLength)]],
         confirmPassword: [null, Validators.required],
-        // Todo: Put age and sex controls back when we have a database
-        // sex: [null, [Validators.required]],
-        // age: [null, [Validators.min(18), Validators.max(100),Validators.required]],
+        gender: [1],
+        age: [this.defaultAge, [Validators.min(this.minAge), Validators.max(this.maxAge),Validators.required]],
         acceptTerms: [false, Validators.requiredTrue]
       },
       {
