@@ -3,6 +3,7 @@ export interface IUser {
   email: string;
   age: number;
   gender: number;
+  orderDate: string;
 }
 
 export interface IRegistration {
@@ -11,4 +12,9 @@ export interface IRegistration {
   password: string;
   age: number;
   gender: number;
+}
+
+export interface IAuthResponse {
+  accessToken: string,
+  orderDate: string
 }
