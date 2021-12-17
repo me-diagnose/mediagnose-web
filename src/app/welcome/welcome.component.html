@@ -1,2 +1,14 @@
-<app-registration></app-registration>
-<app-login></app-login>
+<div class="background w-full h-full"></div>
+
+
+<div class="w-96 h-auto px-12 py-6 bg-white rounded-xl">
+  <ng-container *ngIf="showLogin; else registration">
+    <app-login></app-login>
+    <span>Don't have an account? <span class="link" (click)="toggleShowLogin()">register</span></span>
+  </ng-container>
+</div>
+
+<ng-template #registration>
+  <app-registration></app-registration>
+  <span>Already have an account? <span class="link" (click)="toggleShowLogin()">log in</span></span>
+</ng-template>

@@ -5,9 +5,11 @@ import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-home',
-  templateUrl: './welcome.component.html'
+  templateUrl: './welcome.component.html',
+  styleUrls: ['./welcome.component.scss']
 })
 export class WelcomeComponent implements OnInit, OnDestroy {
+  showLogin = true;
   isLoggedInSub$: Subscription;
 
   constructor(private authService: AuthService, private router: Router) {}
@@ -18,6 +20,10 @@ export class WelcomeComponent implements OnInit, OnDestroy {
         this.router.navigate(['home'])
       }
     });
+  }
+
+  toggleShowLogin(): void {
+    this.showLogin = !this.showLogin;
   }
 
   ngOnDestroy(): void{

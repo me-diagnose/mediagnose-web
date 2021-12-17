@@ -1,4 +1,8 @@
-<form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+<h2>Register</h2>
+
+<form class="flex flex-col w-full mb-6"
+      [formGroup]="registrationForm"
+      (ngSubmit)="onSubmit()">
   <mat-form-field>
     <mat-label>Username</mat-label>
     <input matInput type="text" name="username" formControlName="username" autocomplete="username">
@@ -55,21 +59,28 @@
     </mat-select>
   </mat-form-field>
 
-<mat-form-field class="no-border">
-  <mat-label>Age</mat-label>
-  <mat-slider
-    #slider
-    thumbLabel
-    step="1"
-    [value]="defaultAge"
-    [min]="minAge"
-    [max]="maxAge"></mat-slider>
-  <input class="hidden" matInput formControlName="age" [value]="slider.value">
-</mat-form-field>
+  <div class="flex flex-row w-full items-center">
+    <mat-label class="mat-gray w-12">Age *</mat-label>
+    <mat-form-field class="no-border w-full p-0">
+      <mat-slider
+        class="w-full p-0"
+        #slider
+        thumbLabel
+        step="1"
+        [value]="defaultAge"
+        [min]="minAge"
+        [max]="maxAge"></mat-slider>
+      <input class="hidden" matInput formControlName="age" [value]="slider.value">
+    </mat-form-field>
+  </div>
 
-  <mat-checkbox type="checkbox" formControlName="acceptTerms" (click)="hideTerms()">
-  </mat-checkbox>
-  I have read, understood and I accept and agree to comply with the <u (click)="toggleTerms()">Terms of use</u>
+  <div class="flex flex-row w-full items-start mb-6">
+    <mat-checkbox class="mr-2" type="checkbox" formControlName="acceptTerms" (click)="hideTerms()">
+    </mat-checkbox>
+    <span>I have read, understood and I accept and agree to comply with the <u
+      (click)="toggleTerms()">Terms of use</u></span>
+  </div>
+
   <mat-error *ngIf="isError('acceptTerms') && registrationForm?.get('acceptTerms')?.hasError('required')">You must
     accept the terms of use
   </mat-error>
