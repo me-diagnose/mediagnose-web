@@ -5,6 +5,7 @@ import {AuthGuard} from './shared/guards/auth.guard';
 const routes: Routes = [
   {path: '', redirectTo: 'welcome', pathMatch: 'full'},
   {path: 'welcome', loadChildren: () => import('./welcome/welcome.module').then(m => m.WelcomeModule)},
+  {path: 'order-finished', redirectTo: 'home'},
   {path: 'home', canActivate: [AuthGuard], loadChildren: () => import('./home/home.module').then(m => m.HomeModule)},
 
 ];
