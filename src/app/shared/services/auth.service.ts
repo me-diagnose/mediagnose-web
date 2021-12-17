@@ -1,18 +1,15 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {IRegistration, IUser} from '../interfaces/user.interface';
+import {IAuthResponse, IRegistration, IUser} from '../interfaces/user.interface';
 import {BehaviorSubject, firstValueFrom, map, Observable, tap} from 'rxjs';
 import {environment} from '../../../environments/environment';
-
-interface IAuthResponse {
-  accessToken: string
-}
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private tokenKeyName = environment.tokeyKeyName;
+  private orderDateKeyName = environment.orderDateKeyName;
   private apiURL = environment.mediagnoseAPI.url;
   private isLoginSubject$ = new BehaviorSubject<boolean>(this.hasToken());
 
@@ -28,7 +25,8 @@ export class AuthService {
   public login(username: string, password: string): Promise<IAuthResponse> {
     const urlRoute = `${this.apiURL}/auth/login`;
     return firstValueFrom(this.http.post<IAuthResponse>(urlRoute, {username, password}).pipe(tap((response: IAuthResponse) => {
-      this.saveToken(response.accessToken)
+      this.saveToken(response.accessToken);
+      this.saveOrderDate(response.orderDate);
     })))
   }
 
@@ -45,7 +43,8 @@ export class AuthService {
     const urlRoute = `${this.apiURL}/auth/register`;
     return this.http.post<IAuthResponse>(urlRoute, registrationInfo).pipe(tap((response: IAuthResponse) => {
       if (!!response.accessToken) {
-        this.saveToken(response.accessToken)
+        this.saveToken(response.accessToken);
+        this.saveOrderDate(response.orderDate);
       }
     }), map((response: any) => !!response.accessToken));
   }
@@ -57,6 +56,10 @@ export class AuthService {
 
   private hasToken(): boolean {
     return !!localStorage.getItem(this.tokenKeyName);
+  }
+
+  private saveOrderDate(orderDate: string): void {
+    localStorage.setItem(this.orderDateKeyName, orderDate);
   }
 
 }
