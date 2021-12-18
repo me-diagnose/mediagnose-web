@@ -6,7 +6,7 @@
   <mat-form-field>
     <mat-label>Username/Email</mat-label>
     <input matInput type="email" name="email" formControlName="email" autocomplete="email">
-    <mat-error *ngIf="isError('email') && loginForm.get('email')?.hasError('required')">Thisfield is required
+    <mat-error *ngIf="isError('email') && loginForm.get('email')?.hasError('required')">This field is required
     </mat-error>
   </mat-form-field>
 

@@ -14,7 +14,6 @@ body {
 
 mat-error {
   display: block;
-  font-size: 75%;
 }
 
 .hidden {
@@ -90,4 +89,17 @@ mat-form-field {
 .link {
   cursor: pointer;
   color: $primary;
+}
+
+.close-icon {
+  font-size: 1.1rem;
+  position: absolute;
+  right: -20px;
+  top: -15px;
+  color: #c1bebe;
+}
+
+.close-icon:hover {
+  color: black;
+  cursor: pointer;
 }

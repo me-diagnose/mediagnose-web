@@ -5,6 +5,8 @@ import {Router} from '@angular/router';
 import {mustMatch} from '../../utils/mustMatch.util';
 import {hashPassword} from '../../utils/hashPassword.util';
 import {PaymentService} from '../../shared/services/payment.service';
+import {MatDialog} from '@angular/material/dialog';
+import {TermsOfUseComponent} from '../terms-of-use/terms-of-use.component';
 
 const USERNAME_MAX_LENGTH = 30;
 const PASSWORD_MIN_LENGTH = 6;
@@ -19,7 +21,6 @@ const AGE_DEFAULT = 35;
 })
 export class RegistrationComponent implements OnInit {
   registrationForm: FormGroup;
-  showTerms = false;
   usernameMaxLength = USERNAME_MAX_LENGTH;
   passwordMinLength = PASSWORD_MIN_LENGTH;
   minAge = AGE_MIN;
@@ -29,7 +30,9 @@ export class RegistrationComponent implements OnInit {
   constructor(private fb: FormBuilder,
               private authService: AuthService,
               private router: Router,
-              private paymentService: PaymentService) {
+              private paymentService: PaymentService,
+              public dialog: MatDialog
+              ) {
   }
 
   ngOnInit(): void {
@@ -56,12 +59,13 @@ export class RegistrationComponent implements OnInit {
   }
 
   toggleTerms(): void {
-    this.showTerms = !this.showTerms;
+    this.dialog.open(TermsOfUseComponent, {
+      disableClose: false,
+      autoFocus: false,
+      height: '70vh'
+    });
   }
 
-  hideTerms(): void {
-    this.showTerms = false;
-  }
 
   onSubmit(): void {
     const registrationInfo = {

@@ -75,21 +75,20 @@
   </div>
 
   <div class="flex flex-row w-full items-start mb-6">
-    <mat-checkbox class="mr-2" type="checkbox" formControlName="acceptTerms" (click)="hideTerms()">
+    <mat-checkbox class="mr-2" type="checkbox" formControlName="acceptTerms">
     </mat-checkbox>
     <span>I have read, understood and I accept and agree to comply with the <u
-      (click)="toggleTerms()">Terms of use</u></span>
+      (click)="toggleTerms()" class="link">Terms of use</u></span>
   </div>
 
   <mat-error *ngIf="isError('acceptTerms') && registrationForm?.get('acceptTerms')?.hasError('required')">You must
     accept the terms of use
   </mat-error>
 
-  <span *ngIf="showTerms">
-    <app-terms-of-use></app-terms-of-use>
-  </span>
-
-  <button mat-raised-button color="primary" type="submit" [disabled]="!registrationForm.valid">
+  <button mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="!registrationForm.valid">
     submit
   </button>
 </form>
