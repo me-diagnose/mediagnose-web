@@ -1,3 +1,7 @@
-<mat-toolbar class="md:px-8">
-  <span class="title" (click)="goHome()"><i>me</i><b>D</b>iagnose</span>
+<mat-toolbar class="md:px-8" [color]="isPrimary ? 'primary': ''">
+  <div class="flex justify-between w-full">
+    <span class="title cursor-pointer hidden md:block"><i>me</i><b [style]="{'color': isPrimary ? 'white' : ''}">D</b>iagnose</span>
+    <span *ngIf="isChat && chatTitle">{{chatTitle}}</span>
+    <button mat-stroked-button class="text-sm" *ngIf="isLoggedIn" (click)="logout()">Logout</button>
+  </div>
 </mat-toolbar>

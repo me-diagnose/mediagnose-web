@@ -38,6 +38,9 @@
   </div>
 </ng-template>
 
+
+<app-toolbar [isPrimary]="true" [isLoggedIn]="true" [isChat]="true" [chatTitle]="'Symptom Checker Bot'"></app-toolbar>
+
 <div class="conversation-container">
   <ng-container *ngIf="showTerms">
     <app-question [question]="terms"></app-question>
