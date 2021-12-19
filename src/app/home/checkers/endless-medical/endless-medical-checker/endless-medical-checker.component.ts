@@ -20,9 +20,6 @@ export class EndlessMedicalCheckerComponent implements OnInit, OnDestroy {
   answeredQuestions: ISymptomWithDetails[] = [];
   showMainSymptomCategories = false;
   showTerms = false;
-  terms = 'Please remember, I am not healthcare provider, so I cannot provide professional medical advice.<br>' +
-    'In case of any symptoms, complaints or problems, always immediately seek medical advice appropriately and don\'t delay contacting professional healthcare services. Only after you contact healthcare profesional use this symptom checker. <br>' +
-    'Have you read and do you accept this terms and terms of use of EndlessMedical.com services, which are available for read at EndlessMedical.com?';
   termsAccepted = false;
   results: string[];
   showResults = false;
@@ -45,7 +42,7 @@ export class EndlessMedicalCheckerComponent implements OnInit, OnDestroy {
     if (!accepted) {
       await this.goHome();
     }
-
+    this.showTerms = false;
     this.termsAccepted = true;
     await this.checkerService.acceptTerms();
     await this.submitAgeAndGender();
@@ -83,6 +80,7 @@ export class EndlessMedicalCheckerComponent implements OnInit, OnDestroy {
 
   onShowCurrentQuestion(question: ISymptomWithDetails): void {
     this.currentQuestion = question;
+    this.showMainSymptomCategories = false
   }
 
   subscribeToSuggestions(): void {

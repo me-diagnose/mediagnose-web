@@ -13,7 +13,7 @@ export class MainSymptomsComponent {
   @Output() showMainQuestion: EventEmitter<ISymptomWithDetails> = new EventEmitter<ISymptomWithDetails>();
 
   MainSymptomCategories = MainSymptomsCategories;
-  question = 'Pick your main symptom ...';
+  question ='Let\'s start by selecting your main symptom';
   showList = true;
   mainSymptomQuestion: ISymptomWithDetails | undefined;
 

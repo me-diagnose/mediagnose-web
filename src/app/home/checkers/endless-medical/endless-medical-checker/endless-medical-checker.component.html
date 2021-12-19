@@ -1,27 +1,29 @@
-<ng-template #question let-question='question'>
-  <div [innerHTML]="question">
-  </div>
-</ng-template>
-
 <ng-template #multipleChoices let-choices=choices let-isTerms='isTerms'>
-  <div>
-    <ng-container *ngIf="isTerms">
-      <mat-selection-list #TermsChoices [multiple]="false">
-        <mat-list-option (click)="acceptedTerms(true)">
-          I have read and I accept the terms
-        </mat-list-option>
-        <mat-list-option (click)="acceptedTerms(false)">
-          I do not accept the terms
-        </mat-list-option>
-      </mat-selection-list>
-    </ng-container>
-    <ng-container *ngIf="!isTerms">
-      <mat-selection-list #multipleChoicesList [multiple]="false">
-        <mat-list-option *ngFor="let choice of choices" [value]="choice.value" (click)="onAnswer(choice.value)">
-          {{choice.laytext}}
-        </mat-list-option>
-      </mat-selection-list>
-    </ng-container>
+  <div class="flex flex-col w-full items-end mb-10">
+    <div class="flex flex-col w-auto max-w-4/5 rounded-xl rounded-br-none bg-indigo-50">
+      <ng-container *ngIf="isTerms">
+        <mat-selection-list [multiple]="false" class="flex flex-col">
+          <mat-list-option (click)="acceptedTerms(true)"
+                           class="hover:bg-indigo-500 hover:text-white">
+            <span>I have read and I accept the terms</span>
+          </mat-list-option>
+          <mat-list-option (click)="acceptedTerms(false)"
+                           class="hover:bg-indigo-500 hover:text-white">
+            <span>I do not accept the terms</span>
+          </mat-list-option>
+        </mat-selection-list>
+      </ng-container>
+      <ng-container *ngIf="!isTerms">
+        <mat-selection-list [multiple]="false" class="flex flex-col mb-1">
+          <mat-list-option *ngFor="let choice of choices"
+                           [value]="choice.value"
+                           (click)="onAnswer(choice.value)"
+                           class="bg-indigo-50 hover:bg-indigo-500 hover:text-white">
+           <span>{{choice.laytext}}</span>
+          </mat-list-option>
+        </mat-selection-list>
+      </ng-container>
+    </div>
   </div>
 </ng-template>
 
@@ -38,15 +40,15 @@
   </div>
 </ng-template>
 
-
 <app-toolbar [isPrimary]="true" [isLoggedIn]="true" [isChat]="true" [chatTitle]="'Symptom Checker Bot'"></app-toolbar>
 
-<div class="conversation-container">
-  <ng-container *ngIf="showTerms">
-    <app-question [question]="terms"></app-question>
-
+<div class="conversation-container flex flex-col mt-6 pb-12 mx-2">
+  <div *ngIf="showTerms" class="flex flex-col items-start">
+      <app-question [question]="'Please remember, I am not healthcare provider, so I cannot provide professional medical advice.'"></app-question>
+      <app-question [question]="'In case of any symptoms, complaints or problems, always immediately seek medical advice appropriately and don\'t delay contacting professional healthcare services. Only after you contact healthcare profesional use this symptom checker.'"></app-question>
+      <app-question [question]="'Have you read and do you accept this terms and terms of use of EndlessMedical.com services upon registration?'"></app-question>
     <ng-container *ngTemplateOutlet="multipleChoices; context: {isTerms: true}"></ng-container>
-  </ng-container>
+  </div>
 
   <app-conversation-text *ngFor="let text of conversation" [question]="text.questionText"
                          [answer]="text.answerText || text.answerValue"></app-conversation-text>

@@ -59,11 +59,6 @@ mat-form-field {
   }
 }
 
-.link {
-  cursor: pointer;
-  color: $primary;
-}
-
 .close-icon {
   font-size: 1.1rem;
   position: absolute;
@@ -79,4 +74,10 @@ mat-form-field {
 
 button {
   line-height: 34px;
+}
+
+.mat-list-item, .mat-list-option {
+  min-height: 48px;
+  height: auto !important;
+  display: flex !important;
 }
