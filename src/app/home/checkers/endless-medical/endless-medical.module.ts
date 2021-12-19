@@ -5,12 +5,13 @@ import {EndlessMedicalCheckerComponent} from './endless-medical-checker/endless-
 import {EndlessMedicalCheckerService} from './services/endless-medical-checker.service';
 import { MainSymptomsComponent } from './endless-medical-checker/main-symptoms/main-symptoms.component';
 import { ConversationTextComponent } from './endless-medical-checker/conversation-text/conversation-text.component';
-import { QuestionComponent } from './endless-medical-checker/question/question.component';
+import { QuestionComponent } from './endless-medical-checker/conversation-text/question/question.component';
 import {EndlessMedicalMaterialModule} from './endless-medical-material.module';
 import {SharedComponentsModule} from '../../../shared/components/shared-components.module';
+import {AnswerComponent} from './endless-medical-checker/conversation-text/answer/answer.component';
 
 @NgModule({
-  declarations: [EndlessMedicalCheckerComponent, MainSymptomsComponent, ConversationTextComponent, QuestionComponent],
+  declarations: [EndlessMedicalCheckerComponent, MainSymptomsComponent, ConversationTextComponent, QuestionComponent, AnswerComponent],
   imports: [
     CommonModule,
     EndlessMedicalCheckerRoutingModule,
