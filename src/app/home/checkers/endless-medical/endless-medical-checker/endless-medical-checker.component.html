@@ -22,50 +22,51 @@
 
 <app-toolbar [isPrimary]="true" [isLoggedIn]="true" [isChat]="true" [chatTitle]="'Symptom Checker Bot'"></app-toolbar>
 
-<div class="conversation-container flex flex-col mt-6 pb-12 mx-2">
-  <div *ngIf="showTerms" class="flex flex-col items-start">
+<div class="conversation-container flex flex-col overflow-auto mt-6 pb-12 mx-2"  #scrollable>
+  <div class="flex flex-col conversation-box">
+    <div *ngIf="showTerms" class="flex flex-col items-start">
       <app-question [question]="'Please remember, I am not healthcare provider, so I cannot provide professional medical advice.'"></app-question>
       <app-question [question]="'In case of any symptoms, complaints or problems, always immediately seek medical advice appropriately and don\'t delay contacting professional healthcare services. Only after you contact healthcare profesional use this symptom checker.'"></app-question>
       <app-question [question]="'Have you read and do you accept this terms and terms of use of EndlessMedical.com services upon registration?'"></app-question>
-    <ng-container *ngTemplateOutlet="multipleChoices; context: {isTerms: true}"></ng-container>
-  </div>
+      <ng-container *ngTemplateOutlet="multipleChoices; context: {isTerms: true}"></ng-container>
+    </div>
 
-  <app-conversation-text *ngFor="let text of conversation" [question]="text.questionText"
-                         [answer]="text.answerText || text.answerValue"></app-conversation-text>
+    <app-conversation-text *ngFor="let text of conversation" [question]="text.questionText"
+                           [answer]="text.answerText || text.answerValue"></app-conversation-text>
 
-  <app-main-symptoms *ngIf="showMainSymptomCategories" (answerMainSymptom)="onMainSymptomAnswered($event)"
-                     (showMainQuestion)="onShowCurrentQuestion($event)"></app-main-symptoms>
+    <app-main-symptoms *ngIf="showMainSymptomCategories" (answerMainSymptom)="onMainSymptomAnswered($event)"
+                       (showMainQuestion)="onShowCurrentQuestion($event)"></app-main-symptoms>
 
-  <div *ngIf="currentQuestion && !showResults">
-    <app-question [question]="currentQuestion.laytext"></app-question>
+    <div *ngIf="currentQuestion && !showResults">
+      <app-question [question]="currentQuestion.laytext"></app-question>
 
-    <ng-container [ngSwitch]="currentQuestion.type">
-      <ng-container *ngSwitchCase="'categorical'">
-        <ng-container
-          *ngTemplateOutlet="multipleChoices; context: {choices: currentQuestion.choices, isTerms: false}"></ng-container>
+      <ng-container [ngSwitch]="currentQuestion.type">
+        <ng-container *ngSwitchCase="'categorical'">
+          <ng-container
+            *ngTemplateOutlet="multipleChoices; context: {choices: currentQuestion.choices, isTerms: false}"></ng-container>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'integer'">
+          <ng-container
+            *ngTemplateOutlet="number; context: {min: currentQuestion.min, max: currentQuestion.max, defaultNumber: currentQuestion.default}"></ng-container>
+        </ng-container>
       </ng-container>
+    </div>
 
-      <ng-container *ngSwitchCase="'integer'">
-        <ng-container
-          *ngTemplateOutlet="number; context: {min: currentQuestion.min, max: currentQuestion.max, defaultNumber: currentQuestion.default}"></ng-container>
-      </ng-container>
-    </ng-container>
-  </div>
+    <div *ngIf="showResults">
+      <app-question [question]="'Here are the results based on your answers'"></app-question>
 
-  <div *ngIf="showResults">
-    <app-question [question]="'Here are the results based on your answers'"></app-question>
+      <ul>
+        <li *ngFor="let result of results">
+          <span>{{result[1]}}</span>: <span>{{diseaseProbability(result[2])}}</span>
+        </li>
+      </ul>
 
-    <ul>
-      <li *ngFor="let result of results">
-        <span>{{result[1]}}</span>: <span>{{diseaseProbability(result[2])}}</span>
-      </li>
-    </ul>
-
-    <div>
-      <button mat-raised-button color="primary" (click)="continue()" *ngIf="questionCount < 24">Ask me more questions
-      </button>
-      <button mat-raised-button color="primary" (click)="endSession()">Finish</button>
+      <div>
+        <button mat-raised-button color="primary" (click)="continue()" *ngIf="questionCount < 24">Ask me more questions
+        </button>
+        <button mat-raised-button color="primary" (click)="endSession()">Finish</button>
+      </div>
     </div>
   </div>
-
 </div>

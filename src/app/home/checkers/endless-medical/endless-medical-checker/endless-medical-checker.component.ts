@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Router} from '@angular/router';
 import {EndlessMedicalCheckerService} from '../services/endless-medical-checker.service';
 import {IChoice, ISymptomWithDetails} from '../interfaces/symptom.interface';
@@ -13,7 +13,8 @@ const MIN_QUESTION_LENGTH = 6;
   templateUrl: './endless-medical-checker.component.html',
   styleUrls: ['./endless-medical-checker.component.scss']
 })
-export class EndlessMedicalCheckerComponent implements OnInit, OnDestroy {
+export class EndlessMedicalCheckerComponent implements OnInit, OnDestroy{
+  @ViewChild('scrollable') scrollable: any
   questionCount = MIN_QUESTION_LENGTH;
   conversation: IConversationText[] = [];
   currentQuestion: ISymptomWithDetails;
@@ -35,7 +36,7 @@ export class EndlessMedicalCheckerComponent implements OnInit, OnDestroy {
     }
   ]
 
-  constructor(private router: Router, private checkerService: EndlessMedicalCheckerService, private userService: UserService) {}
+  constructor(private router: Router, private checkerService: EndlessMedicalCheckerService, private userService: UserService, private cdRef: ChangeDetectorRef) {}
 
   async ngOnInit(): Promise<void> {
     if (!this.checkerService.hasSessionID()) {
@@ -75,9 +76,6 @@ export class EndlessMedicalCheckerComponent implements OnInit, OnDestroy {
 
     this.answeredQuestions.push(this.currentQuestion);
 
-    // @ts-ignore
-    this.currentQuestion = undefined;
-
     if(this.conversation.length > this.questionCount) {
       return this.analyze();
     }
@@ -90,24 +88,27 @@ export class EndlessMedicalCheckerComponent implements OnInit, OnDestroy {
   }
 
   onShowCurrentQuestion(question: ISymptomWithDetails): void {
-    this.currentQuestion = question;
+    this.setCurrentQuestion(question);
     this.showMainSymptomCategories = false
   }
 
   subscribeToSuggestions(): void {
+    const currentQuestion = {...this.currentQuestion};
+    this.setCurrentQuestion(undefined);
+
     this.checkerService.suggestSymptoms$().subscribe((questions: any[]) => {
       if(!questions.length) {
-        const sameCategoryQuestion = this.checkerService.getSameCategoryQuestion(this.currentQuestion.category, this.answeredQuestions.map(question => question.name))
+        const sameCategoryQuestion = this.checkerService.getSameCategoryQuestion(currentQuestion.category, this.answeredQuestions.map(question => question.name))
         if(!!sameCategoryQuestion) {
-          this.currentQuestion = sameCategoryQuestion;
+          this.setCurrentQuestion(sameCategoryQuestion);
         }
       } else {
         this.checkerService.getAllSymptoms$().subscribe((symptoms: ISymptomWithDetails[]) => {
-          // @ts-ignore
-          this.currentQuestion = symptoms.find(symptom => symptom.name === questions[0][0]);
+          const question = symptoms.find(symptom => symptom.name === questions[0][0]);
+          this.setCurrentQuestion(question)
           if(!this.currentQuestion) {
-            // @ts-ignore
-            this.currentQuestion = this.checkerService.getSameCategoryQuestion(questions[0][0], this.answeredQuestions.map(question => question.name))
+            const question = this.checkerService.getSameCategoryQuestion(questions[0][0], this.answeredQuestions.map(question => question.name))
+            this.setCurrentQuestion(question)
           }
         })
       }
@@ -134,6 +135,16 @@ export class EndlessMedicalCheckerComponent implements OnInit, OnDestroy {
   async submitAgeAndGender(): Promise<void> {
     const {age, gender} = await this.userService.getUserData();
     await this.checkerService.submitAgeAndGender(age, gender);
+  }
+
+  setCurrentQuestion(currentQuestion: any): void {
+    this.currentQuestion = currentQuestion;
+    this.cdRef.detectChanges()
+    this.scrollToBottom();
+  }
+
+  scrollToBottom(): void{
+    this.scrollable.nativeElement.scrollTop = this.scrollable.nativeElement.scrollHeight
   }
 
   endSession(): void {

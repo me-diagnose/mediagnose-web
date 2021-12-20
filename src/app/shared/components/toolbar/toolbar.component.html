@@ -1,4 +1,4 @@
-<mat-toolbar class="md:px-8" [color]="isPrimary ? 'primary': ''">
+<mat-toolbar class="md:px-8 sticky top-0 z-50" [color]="isPrimary ? 'primary': ''">
   <div class="flex justify-between w-full">
     <span class="title cursor-pointer hidden md:block"><i>me</i><b [style]="{'color': isPrimary ? 'white' : ''}">D</b>iagnose</span>
     <span *ngIf="isChat && chatTitle">{{chatTitle}}</span>
