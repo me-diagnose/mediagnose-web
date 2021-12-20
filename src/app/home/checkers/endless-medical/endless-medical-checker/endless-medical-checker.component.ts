@@ -24,6 +24,16 @@ export class EndlessMedicalCheckerComponent implements OnInit, OnDestroy {
   results: string[];
   showResults = false;
   Number = Number;
+  termChoices = [
+    {
+      laytext: 'I have read and accepted the terms',
+      value: 1
+    },
+    {
+      laytext: 'I do not accept the terms',
+      value: 0
+    }
+  ]
 
   constructor(private router: Router, private checkerService: EndlessMedicalCheckerService, private userService: UserService) {}
 
@@ -65,9 +75,10 @@ export class EndlessMedicalCheckerComponent implements OnInit, OnDestroy {
 
     this.answeredQuestions.push(this.currentQuestion);
 
+    // @ts-ignore
+    this.currentQuestion = undefined;
+
     if(this.conversation.length > this.questionCount) {
-      // @ts-ignore
-      this.currentQuestion = undefined;
       return this.analyze();
     }
 
