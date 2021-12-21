@@ -5,8 +5,10 @@ import {IChoice, ISymptomWithDetails} from '../interfaces/symptom.interface';
 import {IConversationText} from '../interfaces/conversation.interface';
 import {IAnalysisResponse} from '../interfaces/results.interface';
 import {UserService} from '../../../../shared/services/user.service';
+import {ResultsComponent} from './results/results.component';
+import {MatDialog} from '@angular/material/dialog';
 
-const MIN_QUESTION_LENGTH = 6;
+const MIN_QUESTION_LENGTH = 2;
 
 @Component({
   selector: 'app-endless-medical-checker',
@@ -38,7 +40,11 @@ export class EndlessMedicalCheckerComponent implements OnInit, OnDestroy{
     }
   ]
 
-  constructor(private router: Router, private checkerService: EndlessMedicalCheckerService, private userService: UserService, private cdRef: ChangeDetectorRef) {}
+  constructor(private router: Router,
+              private checkerService: EndlessMedicalCheckerService,
+              private userService: UserService,
+              private cdRef: ChangeDetectorRef,
+              private dialog: MatDialog) {}
 
   async ngOnInit(): Promise<void> {
     if (!this.checkerService.hasSessionID()) {
@@ -126,9 +132,18 @@ export class EndlessMedicalCheckerComponent implements OnInit, OnDestroy{
 
   analyze(): void {
     this.checkerService.analyze$().subscribe((results: IAnalysisResponse) => {
-      this.results = results.Diseases;
-      this.showResults = true;
-      this.isFetching = false;
+      this.dialog.open(ResultsComponent, {
+        disableClose: false,
+        autoFocus: false,
+        maxWidth: '90vw',
+        data: {canContinue: this.questionCount < 24, diseases: results.Diseases}
+      }).afterClosed().subscribe(continueQuestions => {
+        if(continueQuestions) {
+          this.continue();
+        } else {
+          this.endSession();
+        }
+      });
     });
   }
 
@@ -168,6 +183,6 @@ export class EndlessMedicalCheckerComponent implements OnInit, OnDestroy{
   }
 
   ngOnDestroy(): void {
-    this.endSession()
+    this.endSession();
   }
 }

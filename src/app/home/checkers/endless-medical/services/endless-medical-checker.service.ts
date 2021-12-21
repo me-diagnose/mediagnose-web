@@ -80,8 +80,8 @@ export class EndlessMedicalCheckerService {
     return this.http.get<IAnalysisResponse>(`${this.url}Analyze?NumberOfResults=5&ResponseFormat=full`);
   }
 
-  public getDocumentation$(): Observable<IDocumentation> {
-    return this.http.get<IDocumentationResponse>(`${this.url}GetMedicalDocumentation?SessionID=7g3FS02QuSAzNBSy&format=json`).pipe(map(response => response.MedicalDocumentation));
+  public getDocumentation(): Promise<IDocumentation> {
+    return firstValueFrom(this.http.get<IDocumentationResponse>(`${this.url}GetMedicalDocumentation?SessionID=${this.sessionId}&format=json`).pipe(map(response => response.MedicalDocumentation)));
   }
 
   public async submitAgeAndGender(age: number, gender: number): Promise<void> {

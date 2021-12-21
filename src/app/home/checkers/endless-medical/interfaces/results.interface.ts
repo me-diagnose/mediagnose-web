@@ -16,7 +16,8 @@ export interface IDocumentationResponse {
 
 export interface IDocumentation {
   Additionally: string;
-  Assessment: string;
+  Assessment: {Problems: string, text: string};
   'Chief complaint': string;
+  HPI: string;
   Plan: string;
 }

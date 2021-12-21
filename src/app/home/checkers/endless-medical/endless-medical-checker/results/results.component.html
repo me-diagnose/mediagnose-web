@@ -1,0 +1,47 @@
+<h3 class="text-center">Results</h3>
+<p class="text-center">Here are the results based on your answers</p>
+
+<ul class="leading-relaxed mb-4">
+  <li *ngFor="let result of data.diseases">
+    <span>{{result[1]}}</span>: <span>{{diseaseProbability(result[2])}}</span>
+  </li>
+</ul>
+
+
+<div class="text-center" *ngIf="!emailInput">
+  <button mat-raised-button color="accent"
+          (click)="showEmailInput()">Send a report to my doctor
+  </button>
+</div>
+
+<ng-container *ngIf="emailInput">
+  <form (ngSubmit)="sendEmail($event)" class="flex flex-row justify-between items-center h-10">
+    <mat-form-field>
+      <mat-label>Email</mat-label>
+      <input matInput type="email" matInput [formControl]="doctorsEmail">
+      <mat-error *ngIf="doctorsEmail.hasError('email') && !doctorsEmail.hasError('required')">
+        Please enter a valid email address
+      </mat-error>
+      <mat-error *ngIf="doctorsEmail.hasError('required')">
+        Email is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+
+    <button mat-raised-button [disabled]="!doctorsEmail.valid" (click)="sendEmail($event)">send</button>
+  </form>
+</ng-container>
+
+
+
+
+<div mat-dialog-actions class="mat-dialog-actions flex flex-row justify-end content-end">
+  <div class="flex w-full justify-between flex-wrap">
+    <button mat-raised-button color="primary"
+            (click)="continue()"
+            *ngIf="data.canContinue">Ask me more questions
+    </button>
+
+    <button mat-raised-button color="primary"
+            (click)="endSession()">Finish</button>
+  </div>
+</div>
