@@ -18,12 +18,14 @@ export class EndlessMedicalCheckerComponent implements OnInit, OnDestroy{
   questionCount = MIN_QUESTION_LENGTH;
   conversation: IConversationText[] = [];
   currentQuestion: ISymptomWithDetails;
+  lastQuestion: ISymptomWithDetails;
   answeredQuestions: ISymptomWithDetails[] = [];
   showMainSymptomCategories = false;
   showTerms = false;
   termsAccepted = false;
   results: string[];
   showResults = false;
+  isFetching = true;
   Number = Number;
   termChoices = [
     {
@@ -43,10 +45,13 @@ export class EndlessMedicalCheckerComponent implements OnInit, OnDestroy{
       await this.initSession();
     }
     this.showTerms = true;
+    this.isFetching = false;
   }
 
   async initSession() {
+    this.isFetching = true;
     await this.checkerService.initSession$();
+    this.isFetching = false;
   }
 
   async acceptedTerms(accepted: boolean): Promise<void> {
@@ -55,32 +60,39 @@ export class EndlessMedicalCheckerComponent implements OnInit, OnDestroy{
     }
     this.showTerms = false;
     this.termsAccepted = true;
+    this.isFetching = true;
     await this.checkerService.acceptTerms();
     await this.submitAgeAndGender();
     this.showMainSymptomCategories = true;
+    this.isFetching = false;
   }
 
   async onAnswer(answerValue: number | string): Promise<void> {
-    answerValue = Number(answerValue);
-    const {name} = this.currentQuestion;
-    const answerText = this.currentQuestion?.choices?.find((choice: IChoice) => choice.value === answerValue)?.laytext || answerValue;
+    const currentQuestion = {...this.currentQuestion}
+    this.setCurrentQuestion(undefined);
+    this.isFetching = true;
 
-    await this.checkerService.updateSymptom(name, answerValue);
+    answerValue = Number(answerValue);
+    const {name} = currentQuestion;
+    const answerText = currentQuestion?.choices?.find((choice: IChoice) => choice.value === answerValue)?.laytext || answerValue;
 
     this.conversation.push({
-      questionText: this.currentQuestion.laytext || this.currentQuestion.text,
+      questionText: currentQuestion.laytext || currentQuestion.text,
       questionName: name,
       answerText,
       answerValue: answerValue
     });
 
-    this.answeredQuestions.push(this.currentQuestion);
+    this.answeredQuestions.push(currentQuestion);
+
+    await this.checkerService.updateSymptom(name, answerValue);
 
     if(this.conversation.length > this.questionCount) {
+      this.lastQuestion = currentQuestion;
       return this.analyze();
     }
 
-    this.subscribeToSuggestions();
+    this.subscribeToSuggestions(currentQuestion);
   }
 
   onMainSymptomAnswered(text: IConversationText): void {
@@ -92,10 +104,7 @@ export class EndlessMedicalCheckerComponent implements OnInit, OnDestroy{
     this.showMainSymptomCategories = false
   }
 
-  subscribeToSuggestions(): void {
-    const currentQuestion = {...this.currentQuestion};
-    this.setCurrentQuestion(undefined);
-
+  subscribeToSuggestions(currentQuestion: any): void {
     this.checkerService.suggestSymptoms$().subscribe((questions: any[]) => {
       if(!questions.length) {
         const sameCategoryQuestion = this.checkerService.getSameCategoryQuestion(currentQuestion.category, this.answeredQuestions.map(question => question.name))
@@ -119,6 +128,7 @@ export class EndlessMedicalCheckerComponent implements OnInit, OnDestroy{
     this.checkerService.analyze$().subscribe((results: IAnalysisResponse) => {
       this.results = results.Diseases;
       this.showResults = true;
+      this.isFetching = false;
     });
   }
 
@@ -129,7 +139,7 @@ export class EndlessMedicalCheckerComponent implements OnInit, OnDestroy{
   continue(): void {
     this.questionCount = this.questionCount + 6;
     this.showResults = false;
-    this.subscribeToSuggestions();
+    this.subscribeToSuggestions(this.lastQuestion);
   }
 
   async submitAgeAndGender(): Promise<void> {
@@ -138,6 +148,7 @@ export class EndlessMedicalCheckerComponent implements OnInit, OnDestroy{
   }
 
   setCurrentQuestion(currentQuestion: any): void {
+    this.isFetching = false
     this.currentQuestion = currentQuestion;
     this.cdRef.detectChanges()
     this.scrollToBottom();
