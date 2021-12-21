@@ -1,28 +1,10 @@
-<ng-template #question let-question='question'>
-  <div [innerHTML]="question">
-  </div>
-</ng-template>
-
 <ng-template #multipleChoices let-choices=choices let-isTerms='isTerms'>
-  <div>
-    <ng-container *ngIf="isTerms">
-      <mat-selection-list #TermsChoices [multiple]="false">
-        <mat-list-option (click)="acceptedTerms(true)">
-          I have read and I accept the terms
-        </mat-list-option>
-        <mat-list-option (click)="acceptedTerms(false)">
-          I do not accept the terms
-        </mat-list-option>
-      </mat-selection-list>
-    </ng-container>
-    <ng-container *ngIf="!isTerms">
-      <mat-selection-list #multipleChoicesList [multiple]="false">
-        <mat-list-option *ngFor="let choice of choices" [value]="choice.value" (click)="onAnswer(choice.value)">
-          {{choice.laytext}}
-        </mat-list-option>
-      </mat-selection-list>
-    </ng-container>
-  </div>
+  <ng-container *ngIf="isTerms">
+    <app-answer [multiple]="true" [choices]="termChoices" (answerWasChosen)="acceptedTerms($event)"></app-answer>
+  </ng-container>
+  <ng-container *ngIf="!isTerms">
+    <app-answer [multiple]="true" [choices]="choices" (answerWasChosen)="onAnswer($event)"></app-answer>
+  </ng-container>
 </ng-template>
 
 <ng-template #number let-min='min' let-max='max' let-defaultNumber='defaultNumber'>
@@ -38,12 +20,19 @@
   </div>
 </ng-template>
 
-<div class="conversation-container">
-  <ng-container *ngIf="showTerms">
-    <app-question [question]="terms"></app-question>
+<app-toolbar [isPrimary]="true" [isLoggedIn]="true" [isChat]="true" [chatTitle]="'Symptom Checker Bot'"></app-toolbar>
 
+<div class="conversation-container flex flex-col overflow-auto pt-2 pb-12 mx-2" #scrollable>
+
+  <div *ngIf="showTerms" class="flex flex-col items-start">
+    <app-question
+      [question]="'Please remember, I am not healthcare provider, so I cannot provide professional medical advice.'"></app-question>
+    <app-question
+      [question]="'In case of any symptoms, complaints or problems, always immediately seek medical advice appropriately and don\'t delay contacting professional healthcare services. Only after you contact healthcare profesional use this symptom checker.'"></app-question>
+    <app-question
+      [question]="'Have you read and do you accept this terms and terms of use of EndlessMedical.com services upon registration?'"></app-question>
     <ng-container *ngTemplateOutlet="multipleChoices; context: {isTerms: true}"></ng-container>
-  </ng-container>
+  </div>
 
   <app-conversation-text *ngFor="let text of conversation" [question]="text.questionText"
                          [answer]="text.answerText || text.answerValue"></app-conversation-text>
@@ -51,7 +40,7 @@
   <app-main-symptoms *ngIf="showMainSymptomCategories" (answerMainSymptom)="onMainSymptomAnswered($event)"
                      (showMainQuestion)="onShowCurrentQuestion($event)"></app-main-symptoms>
 
-  <div *ngIf="currentQuestion && !showResults">
+  <div *ngIf="currentQuestion && !showResults && !isFetching">
     <app-question [question]="currentQuestion.laytext"></app-question>
 
     <ng-container [ngSwitch]="currentQuestion.type">
@@ -67,20 +56,9 @@
     </ng-container>
   </div>
 
-  <div *ngIf="showResults">
-    <app-question [question]="'Here are the results based on your answers'"></app-question>
-
-    <ul>
-      <li *ngFor="let result of results">
-        <span>{{result[1]}}</span>: <span>{{diseaseProbability(result[2])}}</span>
-      </li>
-    </ul>
-
-    <div>
-      <button mat-raised-button color="primary" (click)="continue()" *ngIf="questionCount < 24">Ask me more questions
-      </button>
-      <button mat-raised-button color="primary" (click)="endSession()">Finish</button>
-    </div>
+  <div *ngIf="isFetching">
+    <div class="typing typing-1"></div>
+    <div class="typing typing-2"></div>
+    <div class="typing typing-3"></div>
   </div>
-
 </div>

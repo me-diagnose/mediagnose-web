@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {IAuthResponse, IRegistration, IUser} from '../interfaces/user.interface';
 import {BehaviorSubject, firstValueFrom, map, Observable, tap} from 'rxjs';
 import {environment} from '../../../environments/environment';
+import {Router} from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class AuthService {
   private apiURL = environment.mediagnoseAPI.url;
   private isLoginSubject$ = new BehaviorSubject<boolean>(this.hasToken());
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private router: Router) {
   }
 
   private _user: IUser;
@@ -36,7 +37,9 @@ export class AuthService {
 
   public logout(): void {
     localStorage.removeItem(this.tokenKeyName);
+    localStorage.removeItem(this.orderDateKeyName);
     this.isLoginSubject$.next(false);
+    this.router.navigate(['welcome']);
   }
 
   public register$(registrationInfo: IRegistration): Observable<boolean> {

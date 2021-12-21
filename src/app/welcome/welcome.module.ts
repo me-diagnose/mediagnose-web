@@ -7,6 +7,7 @@ import {ReactiveFormsModule} from "@angular/forms";
 import { LoginComponent } from './login/login.component';
 import {TermsOfUseComponent} from "./terms-of-use/terms-of-use.component";
 import {WelcomeMaterialModule} from './welcome-material.module';
+import {SharedComponentsModule} from '../shared/components/shared-components.module';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import {WelcomeMaterialModule} from './welcome-material.module';
     CommonModule,
     WelcomeRoutingModule,
     ReactiveFormsModule,
-    WelcomeMaterialModule
+    WelcomeMaterialModule,
+    SharedComponentsModule
   ]
 })
 export class WelcomeModule { }

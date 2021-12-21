@@ -4,7 +4,8 @@ import {PaymentService} from '../shared/services/payment.service';
 
 @Component({
   selector: 'app-home',
-  templateUrl: './home.component.html'
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit{
   showThankYou = false;
@@ -26,4 +27,5 @@ export class HomeComponent implements OnInit{
   showThankYouMessage(): void {
     this.showThankYou = true;
   }
+
 }

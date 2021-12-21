@@ -13,24 +13,33 @@ export class MainSymptomsComponent {
   @Output() showMainQuestion: EventEmitter<ISymptomWithDetails> = new EventEmitter<ISymptomWithDetails>();
 
   MainSymptomCategories = MainSymptomsCategories;
-  question = 'Pick your main symptom ...';
+  question ='Let\'s start by selecting your main symptom';
   showList = true;
   mainSymptomQuestion: ISymptomWithDetails | undefined;
 
   constructor(private checkerService: EndlessMedicalCheckerService) {
   }
 
-  onSymptomClick(chosenSymptom: { key:string
-    value: string }): void {
+  onSymptomClick(value: string): void {
+    // @ts-ignore
+    const key = Object.keys(MainSymptomsCategories)[Object.values(MainSymptomsCategories).indexOf(value)]
+    const chosenSymptom = {
+      key,
+      value
+    }
     this.showList = false;
     this.answerMainSymptom.emit({
       questionText: this.question,
-      questionName: chosenSymptom.key,
-      answerText: chosenSymptom.value,
+      questionName: key,
+      answerText: value,
       answerValue: 0
     })
 
     this.subscribeForSymptomQuestion(chosenSymptom);
+  }
+
+  getMainSymptomsValues(): string[] {
+    return Object.values(this.MainSymptomCategories);
   }
 
   subscribeForSymptomQuestion(chosenSymptom: { key: string
