@@ -4,7 +4,7 @@ export const environment = {
   orderDateKeyName: 'MD_Order_Date',
   mediagnoseAPI: {
     salt: '$2a$10$cKN3EjVTamPjnw3m0Hk1De',
-    url: 'http://localhost:3000'
+    url: 'https://mediagnose-api.herokuapp.com'
   },
   endlessMedical: {
     checkerUrl: 'https://api-prod.endlessmedical.com/v1/dx/',
