@@ -8,7 +8,7 @@ import {UserService} from '../../../../shared/services/user.service';
 import {ResultsComponent} from './results/results.component';
 import {MatDialog} from '@angular/material/dialog';
 
-const MIN_QUESTION_LENGTH = 2;
+const MIN_QUESTION_LENGTH = 6;
 
 @Component({
   selector: 'app-endless-medical-checker',
