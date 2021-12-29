@@ -7,6 +7,8 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {EndlessMedicalInterceptor} from './home/checkers/endless-medical/endless-medical.interceptor';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AuthInterceptor} from './shared/interceptors/auth-interceptor.service';
+import {ErrorInterceptor} from './shared/interceptors/error-interceptor.service';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -16,13 +18,16 @@ import {AuthInterceptor} from './shared/interceptors/auth-interceptor.service';
     HttpClientModule,
     BrowserModule,
     AppRoutingModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MatSnackBarModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,
     useClass: EndlessMedicalInterceptor,
     multi: true
-  }, {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},],
+  },
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true}],
   bootstrap: [AppComponent]
 })
 export class AppModule {
