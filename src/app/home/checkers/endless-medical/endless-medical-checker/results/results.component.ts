@@ -21,8 +21,17 @@ export class ResultsComponent {
     return (Number(probability) * 100).toFixed(2) + '%';
   }
 
-  showEmailInput(): void{
+  showEmailInput(): void {
     this.emailInput = true;
+  }
+
+  getProblemsAndProbability(): string {
+    let result = ''
+    for(let disease of this.data.diseases) {
+      result += `${disease[1]}: ${(Number(disease[2])* 100).toFixed(2)}%\n`
+    }
+
+    return result;
   }
 
   async sendEmail(event: Event): Promise<void> {
@@ -30,7 +39,7 @@ export class ResultsComponent {
 
     const documentation = await this.checkerService.getDocumentation();
     const subject = `Patient Symptom report ${documentation['Chief complaint']}`;
-    const body = encodeURIComponent(`${documentation.Assessment.text}\n\nPlan:\n${documentation.Plan}\n\nPossible Problems:\n${documentation.Assessment.Problems}`)
+    const body = encodeURIComponent(`${documentation.Assessment.text}\n\nPlan:\n${documentation.Plan}\n\nPossible Problems:\n${this.getProblemsAndProbability()}`)
 
     window.open(`mailto:${this.doctorsEmail.value}?subject=${subject}&body=${body}`);
   }
