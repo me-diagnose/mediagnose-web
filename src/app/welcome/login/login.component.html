@@ -1,0 +1,24 @@
+<h2>Login</h2>
+
+<form class="flex flex-col w-full mb-6"
+      [formGroup]="loginForm"
+      (ngSubmit)="onSubmit()">
+  <mat-form-field>
+    <mat-label>Username/Email</mat-label>
+    <input matInput type="email" name="email" formControlName="email" autocomplete="email">
+    <mat-error *ngIf="isError('email') && loginForm.get('email')?.hasError('required')">This field is required
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Password</mat-label>
+    <input matInput type="password" name="password" formControlName="password" autocomplete="current-password">
+    <mat-error *ngIf="isError('password') && loginForm.get('password')?.hasError('required')">This field is
+      required
+    </mat-error>
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" type="submit" [disabled]="!loginForm.valid">
+    login
+  </button>
+</form>

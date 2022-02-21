@@ -1,0 +1,3 @@
+<app-question [question]="question"></app-question>
+
+<app-answer [choices]="getMainSymptomsValues()" [multiple]="true" (answerWasChosen)="onSymptomClick($event)"></app-answer>

@@ -1,0 +1,18 @@
+<ng-template #registration>
+  <app-registration></app-registration>
+  <span>Already have an account? <span class="link" (click)="toggleShowLogin()">log in</span></span>
+</ng-template>
+
+<div class="wrapper w-full h-screen"></div>
+<div class="background w-full h-screen"></div>
+
+<app-toolbar></app-toolbar>
+
+<div class="form-container flex w-full items-center justify-center md:justify-end md:pr-12 lg:pr-40">
+  <div class="w-96 px-12 py-6 bg-gray-50 rounded-xl shadow-xl">
+    <ng-container *ngIf="showLogin; else registration">
+      <app-login></app-login>
+      <span>Don't have an account? <span class="link" (click)="toggleShowLogin()">register</span></span>
+    </ng-container>
+  </div>
+</div>

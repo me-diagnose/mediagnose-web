@@ -1,0 +1,94 @@
+<h2>Register</h2>
+
+<form class="flex flex-col w-full mb-6"
+      [formGroup]="registrationForm"
+      (ngSubmit)="onSubmit()">
+  <mat-form-field>
+    <mat-label>Username</mat-label>
+    <input matInput type="text" name="username" formControlName="username" autocomplete="username">
+    <mat-error *ngIf="isError('username') && registrationForm.get('username')?.hasError('required')">This field is
+      required
+    </mat-error>
+    <mat-error *ngIf="isError('username') && registrationForm.get('username')?.hasError('maxlength')">Must be less
+      than {{usernameMaxLength}}
+      characters
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Email</mat-label>
+    <input matInput type="email" name="email" formControlName="email" autocomplete="email">
+    <mat-error *ngIf="isError('email') && registrationForm.get('email')?.hasError('required')">This field is required
+    </mat-error>
+    <mat-error *ngIf="isError('email') && registrationForm.get('email')?.hasError('email')">Please fill a valid email
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Password</mat-label>
+    <input matInput type="password" name="password" formControlName="password" autocomplete="new-password">
+    <mat-error *ngIf="isError('password') && registrationForm.get('password')?.hasError('required')">This field is
+      required
+    </mat-error>
+    <mat-error *ngIf="isError('password') && registrationForm.get('password')?.hasError('minLength')">Password must be
+      at least {{passwordMinLength}}
+      characters
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Confirm password</mat-label>
+    <input matInput type="password" formControlName="confirmPassword" autocomplete="new-password">
+    <mat-error *ngIf="isError('confirmPassword') && registrationForm.get('confirmPassword')?.hasError('required')">
+      Confirmation is required
+    </mat-error>
+    <mat-error *ngIf="isError('confirmPassword') && registrationForm.get('confirmPassword')?.hasError('passwordMatch')">
+      Passwords don't match
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Gender</mat-label>
+    <mat-select matNativeControl formControlName="gender">
+      <mat-option [value]="2">
+        Male
+      </mat-option>
+      <mat-option [value]="2">
+        Female
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <div class="flex flex-row w-full items-center">
+    <mat-label class="mat-gray w-12">Age *</mat-label>
+    <mat-form-field class="no-border w-full p-0">
+      <mat-slider
+        class="w-full p-0"
+        #slider
+        thumbLabel
+        step="1"
+        [value]="defaultAge"
+        [min]="minAge"
+        [max]="maxAge"></mat-slider>
+      <input class="hidden" matInput formControlName="age" [value]="slider.value">
+    </mat-form-field>
+  </div>
+
+  <div class="flex flex-row w-full items-start mb-6">
+    <mat-checkbox class="mr-2" type="checkbox" formControlName="acceptTerms">
+    </mat-checkbox>
+    <span>I have read, understood and I accept and agree to comply with the <u
+      (click)="toggleTerms()" class="link">Terms of use</u></span>
+  </div>
+
+  <mat-error *ngIf="isError('acceptTerms') && registrationForm?.get('acceptTerms')?.hasError('required')">You must
+    accept the terms of use
+  </mat-error>
+
+  <button mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="!registrationForm.valid">
+    submit
+  </button>
+</form>
