@@ -22,7 +22,8 @@ const envConfigFile = `export const environment = {
     },
     endlessMedical: {
       checkerUrl: '${process.env.ENDLESSMEDICAL_CHECKER_URL}',
-      sessionKey: '${process.env.ENDLESSMEDICAL_SESSION_KEY}'
+      sessionKey: '${process.env.ENDLESSMEDICAL_SESSION_KEY}',
+      apiKey: '${process.env.ENDLESSMEDICAL_API_KEY}'
     }
 };
 `;
